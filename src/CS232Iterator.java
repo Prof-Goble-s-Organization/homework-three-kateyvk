@@ -39,7 +39,7 @@ public interface CS232Iterator<E> {
 	 * @return true if previous will return an element, false if not (i.e. will
 	 *         throw an exception).
 	 */
-	public boolean hasPrevious();
+	c
 
 	/**
 	 * Get the previous element in the structure and move the iterator backward

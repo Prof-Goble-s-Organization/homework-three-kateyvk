@@ -10,11 +10,13 @@ import java.util.NoSuchElementException;
  * @version Feb 18, 2016
  */
 public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
-		CS232Iterable<E> {
+		CS232Iterable<E>,CS232Iterator<E> {
 
 	private DLLNode head;
 	private DLLNode tail;
 	private int size;
+	private DLLNode cursor;
+	private DLLNode lastReturn;
 
 	/**
 	 * Construct a new empty CS232DoublyLinkedList.
@@ -30,6 +32,69 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 		head.next = tail;
 		size = 0;
 	}
+	
+	/**
+	 * Check if there is at least one more element that can be retrieved by a
+	 * call to previous.
+	 * 
+	 * @return true if previous will return an element, false if not (i.e. will
+	 *         throw an exception).
+	 */
+	public boolean hasPrevious() {
+		if (cursor.prev != head) {
+			return true;
+		}//checking to see if there is a previous element
+		else{
+			return false;
+		}
+	}
+
+	/**
+	 * Get the previous element in the structure and move the iterator backward
+	 * in the structure. Successive calls to previous will traverse all elements
+	 * of the structure in the opposite order to next. Note that alternating
+	 * calls to next and previous will return the same element.
+	 * 
+	 * @return the previous element in the structure.
+	 * @throws NoSuchElementException
+	 *             if there is no previous element to be returned (i.e.
+	 *             hasPrevious returns false).
+	 */
+	public E previous() {
+		if (hasPrevious() == false) {
+			throw new NoSuchElementException("There is no previous node");
+		}
+		cursor = cursor.prev; //movinf cursor back one
+		lastReturn = cursor; //adjusting last return value
+		return cursor.element; //return the current element node
+	}
+	/**
+	 * Removes from the list the last element that was returned by next() or
+	 * previous(). This call can only be made once per call to next or previous.
+	 * 
+	 * @return the element that was removed from the structure.
+	 * @throws IllegalStateException
+	 *             if next or previous have not been called since the last call
+	 *             to remove.
+	 */
+	public E remove() {
+		if (lastReturn.equals(null)) {
+			throw new IllegalStateException("No element to remove here!");
+		}
+		
+		E element = lastReturn.element; //set lastReturned node to element
+		
+		//update previous node and following node to skip removed node
+		lastReturn.prev.next =lastReturn.next; 
+		lastReturn.next.prev = lastReturn.prev;
+		
+		//adjust size, return the removed element, and set the lastReturn to null(so you could not remove same node twice)
+		lastReturn=null;
+		size--;
+		return element;
+	}
+
+
 
 	/**
 	 * {@inheritDoc}
