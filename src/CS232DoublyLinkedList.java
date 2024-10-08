@@ -114,8 +114,15 @@ public class CS232DoublyLinkedList<E> implements CS232List<E> {
 	 * {@inheritDoc}
 	 */
 	public E remove(int index) throws IndexOutOfBoundsException {
-		// Intentionally not implemented.
-		return null;
+		DLLNode cutNode = getNode(index); //get actual node from given index
+		E element = cutNode.element; //storing the return 
+		
+		//These make sure node before and after skip this removed node.
+		cutNode.prev.next = cutNode.next;
+		cutNode.next.prev = cutNode.prev;
+		size --;
+		return element;//returning the removed node.
+		
 	}
 
 	/**
@@ -128,7 +135,13 @@ public class CS232DoublyLinkedList<E> implements CS232List<E> {
 	 *             if index < 0 or index >= size()
 	 */
 	public void clearTo(int index) throws IndexOutOfBoundsException {
-		// Intentionally not implemented.
+		checkBounds(index);
+		while(size>index+1) {
+			remove(size-1);
+		}
+		
+		
+		
 	}
 
 	/**
@@ -147,9 +160,15 @@ public class CS232DoublyLinkedList<E> implements CS232List<E> {
 	 * @throws IllegalArgumentException
 	 *             if list is empty.
 	 */
-	public void addAllAt(int index, CS232DoublyLinkedList<E> list)
-			throws IndexOutOfBoundsException {
-		// Intentionally not implemented.
+	public void addAllAt(int index, CS232DoublyLinkedList<E> list) {
+		if (list.size()==0) {
+			throw new IllegalArgumentException("Given list is empty");
+		}
+		checkBounds(index);
+		for(int i=0; i<list.size(); i++) {
+			E element = list.get(i); //get and store element at i from given list
+			insert(index +i ,element);
+		}
 	}
 
 	/*

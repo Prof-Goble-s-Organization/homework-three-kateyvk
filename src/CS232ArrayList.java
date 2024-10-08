@@ -1,5 +1,7 @@
 package hw03;
 
+import java.util.NoSuchElementException;
+
 /**
  * An implementation of the CS132List interface backed with an array of Objects.
  * 
@@ -7,7 +9,7 @@ package hw03;
  * @author Dickinson College
  * @version Feb 18, 2016
  */
-public class CS232ArrayList<E> implements CS232List<E> {
+public class CS232ArrayList<E> implements CS232List<E>, CS232Iterable<E> {
 
     private static final int INITIAL_CAPACITY = 10;
 
@@ -21,6 +23,7 @@ public class CS232ArrayList<E> implements CS232List<E> {
         listElements = (E[]) new Object[INITIAL_CAPACITY];
         currentSize = 0;
     }
+    
 
     /**
      * {@inheritDoc}
@@ -143,5 +146,49 @@ public class CS232ArrayList<E> implements CS232List<E> {
 
             return elem;
         }
+    }
+    public CS232Iterator<E> getIterator(){
+    	
+    }
+    private class ArrayIterator implements CS232Iterator<E>{
+    	private int cursor;
+    	private int lastReturn;
+    	
+    	public ArrayIterator() {
+    		cursor = 2;
+    		lastReturn =1;
+    	}
+    	
+    	
+    	public boolean hasNext() {
+    		if(cursor < currentSize) {
+    			return true;
+    		}else {
+    			return false;
+    		}
+    		
+    	}
+    	public boolean hasPrevious() {
+    		if (cursor >0) {
+    			return true;
+    		}else {
+    			return false;
+    		}
+    	}
+    	public E previous() {
+    		if(hasPrevious()==false) {
+    			throw new NoSuchElementException("There is no previous element.");
+    		}else {
+    			lastReturn = --cursor;//update value so the cursor is actually on previous.
+    			return listElements[lastReturn]; //returning previous element based on updated lastReturn
+    		}
+    		
+    	}
+    	public void insert(E element) {
+    		throw new UnsupportedOperationException("");
+    	}
+    	public E remove() {
+    		throw new UnsupportedOperationException("");
+    	}
     }
 }
